@@ -11,9 +11,13 @@ from loguru import logger
 import sys
 
 from app.config import settings
-from app.db.database import init_db, close_db
+from app.db.database import init_db, close_db, get_db_session
+from app.db.models import User
+from app.core.security import get_password_hash
 from app.api.v1.router import api_router
 from app.core.exceptions import ProInvestiXException
+from sqlalchemy import select
+from datetime import datetime
 
 
 # =============================================================================
@@ -40,6 +44,31 @@ else:
 
 
 # =============================================================================
+# DEFAULT ADMIN USER
+# =============================================================================
+
+async def create_default_admin():
+    """Create default admin user if not exists."""
+    async with get_db_session() as db:
+        result = await db.execute(select(User).where(User.email == "admin@proinvestix.ma"))
+        if not result.scalar_one_or_none():
+            admin = User(
+                username="admin",
+                email="admin@proinvestix.ma",
+                password_hash=get_password_hash("Admin2030!"),
+                role="SuperAdmin",
+                is_active=True,
+                is_verified=True,
+                created_at=datetime.utcnow(),
+            )
+            db.add(admin)
+            await db.commit()
+            logger.info("Default admin user created: admin@proinvestix.ma")
+        else:
+            logger.info("Default admin user already exists")
+
+
+# =============================================================================
 # LIFESPAN (STARTUP/SHUTDOWN)
 # =============================================================================
 
@@ -57,6 +86,9 @@ async def lifespan(app: FastAPI):
     # Initialize database
     await init_db()
     logger.info("Database initialized")
+    
+    # Create default admin user
+    await create_default_admin()
     
     yield
     

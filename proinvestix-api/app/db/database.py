@@ -63,3 +63,22 @@ async def close_db():
     Called on application shutdown.
     """
     await engine.dispose()
+
+
+from contextlib import asynccontextmanager
+
+@asynccontextmanager
+async def get_db_session():
+    """
+    Context manager for database session.
+    Use for non-request database operations.
+    """
+    async with AsyncSessionLocal() as session:
+        try:
+            yield session
+            await session.commit()
+        except Exception:
+            await session.rollback()
+            raise
+        finally:
+            await session.close()
