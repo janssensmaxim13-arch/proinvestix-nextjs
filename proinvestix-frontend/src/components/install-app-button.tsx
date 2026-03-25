@@ -11,14 +11,14 @@ interface BeforeInstallPromptEvent extends Event {
 
 export function InstallAppButton() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)
-  const [showIOSInstructions, setShowIOSInstructions] = useState(false)
-  const [isInstalled, setIsInstalled] = useState(false)
+  const [showInstructions, setShowInstructions] = useState(false)
+  const [isStandalone, setIsStandalone] = useState(false)
   const [isIOS, setIsIOS] = useState(false)
 
   useEffect(() => {
-    // Check if already installed
+    // Check if running as installed PWA (standalone mode)
     if (window.matchMedia('(display-mode: standalone)').matches) {
-      setIsInstalled(true)
+      setIsStandalone(true)
       return
     }
 
@@ -41,44 +41,37 @@ export function InstallAppButton() {
     if (deferredPrompt) {
       // Chrome/Android - show native install prompt
       deferredPrompt.prompt()
-      const { outcome } = await deferredPrompt.userChoice
-      if (outcome === 'accepted') {
-        setIsInstalled(true)
-      }
+      await deferredPrompt.userChoice
       setDeferredPrompt(null)
-    } else if (isIOS) {
-      // iOS - show instructions
-      setShowIOSInstructions(true)
     } else {
-      // Fallback - show general instructions
-      setShowIOSInstructions(true)
+      // iOS or no prompt available - show instructions
+      setShowInstructions(true)
     }
   }
 
-  // Don't show if already installed
-  if (isInstalled) return null
+  // Hide button only when running as installed app (standalone)
+  if (isStandalone) return null
 
   return (
     <>
       <Button
         onClick={handleInstallClick}
         className="bg-gradient-to-r from-red-600 to-green-600 hover:from-red-700 hover:to-green-700 text-white font-semibold gap-2"
-        size="lg"
       >
-        <Download className="h-5 w-5" />
+        <Download className="h-4 w-4" />
         Download App
       </Button>
 
-      {/* iOS/Fallback Instructions Modal */}
-      {showIOSInstructions && (
+      {/* Instructions Modal */}
+      {showInstructions && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-card border rounded-xl p-6 max-w-md w-full space-y-4">
+          <div className="bg-gray-900 border border-gray-700 rounded-xl p-6 max-w-md w-full space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-xl font-bold">Installeer ProInvestiX</h3>
+              <h3 className="text-xl font-bold text-white">Installeer ProInvestiX</h3>
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => setShowIOSInstructions(false)}
+                onClick={() => setShowInstructions(false)}
               >
                 <X className="h-5 w-5" />
               </Button>
@@ -86,55 +79,55 @@ export function InstallAppButton() {
 
             {isIOS ? (
               <div className="space-y-4">
-                <p className="text-muted-foreground">
-                  Volg deze stappen om de app te installeren op je iPhone/iPad:
+                <p className="text-gray-400">
+                  Volg deze stappen om de app te installeren:
                 </p>
                 <div className="space-y-3">
-                  <div className="flex items-start gap-3 p-3 bg-muted rounded-lg">
-                    <div className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">1</div>
+                  <div className="flex items-start gap-3 p-3 bg-gray-800 rounded-lg">
+                    <div className="bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">1</div>
                     <div className="flex-1">
-                      <p className="font-medium">Tik op Delen</p>
-                      <p className="text-sm text-muted-foreground flex items-center gap-1">
+                      <p className="font-medium text-white">Tik op Delen</p>
+                      <p className="text-sm text-gray-400 flex items-center gap-1">
                         Tik op <Share className="h-4 w-4" /> onderaan het scherm
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3 p-3 bg-muted rounded-lg">
-                    <div className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">2</div>
+                  <div className="flex items-start gap-3 p-3 bg-gray-800 rounded-lg">
+                    <div className="bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">2</div>
                     <div className="flex-1">
-                      <p className="font-medium">Zet op beginscherm</p>
-                      <p className="text-sm text-muted-foreground flex items-center gap-1">
+                      <p className="font-medium text-white">Zet op beginscherm</p>
+                      <p className="text-sm text-gray-400 flex items-center gap-1">
                         Scroll en tik op <PlusSquare className="h-4 w-4" /> "Zet op beginscherm"
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3 p-3 bg-muted rounded-lg">
-                    <div className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">3</div>
+                  <div className="flex items-start gap-3 p-3 bg-gray-800 rounded-lg">
+                    <div className="bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">3</div>
                     <div className="flex-1">
-                      <p className="font-medium">Bevestig</p>
-                      <p className="text-sm text-muted-foreground">Tik op "Voeg toe" rechtsboven</p>
+                      <p className="font-medium text-white">Bevestig</p>
+                      <p className="text-sm text-gray-400">Tik op "Voeg toe" rechtsboven</p>
                     </div>
                   </div>
                 </div>
               </div>
             ) : (
               <div className="space-y-4">
-                <p className="text-muted-foreground">
+                <p className="text-gray-400">
                   Installeer de app voor snelle toegang:
                 </p>
                 <div className="space-y-3">
-                  <div className="flex items-start gap-3 p-3 bg-muted rounded-lg">
-                    <Monitor className="h-5 w-5 text-muted-foreground mt-0.5" />
+                  <div className="flex items-start gap-3 p-3 bg-gray-800 rounded-lg">
+                    <Monitor className="h-5 w-5 text-gray-400 mt-0.5" />
                     <div>
-                      <p className="font-medium">Desktop (Chrome)</p>
-                      <p className="text-sm text-muted-foreground">Klik op het install icoon in de URL balk</p>
+                      <p className="font-medium text-white">Desktop (Chrome/Edge)</p>
+                      <p className="text-sm text-gray-400">Klik op het install icoon in de URL balk, of Menu → "Installeer ProInvestiX"</p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3 p-3 bg-muted rounded-lg">
-                    <Smartphone className="h-5 w-5 text-muted-foreground mt-0.5" />
+                  <div className="flex items-start gap-3 p-3 bg-gray-800 rounded-lg">
+                    <Smartphone className="h-5 w-5 text-gray-400 mt-0.5" />
                     <div>
-                      <p className="font-medium">Android (Chrome)</p>
-                      <p className="text-sm text-muted-foreground">Menu (⋮) → "App installeren"</p>
+                      <p className="font-medium text-white">Android (Chrome)</p>
+                      <p className="text-sm text-gray-400">Menu (⋮) → "App installeren" of "Toevoegen aan startscherm"</p>
                     </div>
                   </div>
                 </div>
@@ -142,8 +135,8 @@ export function InstallAppButton() {
             )}
 
             <Button
-              onClick={() => setShowIOSInstructions(false)}
-              className="w-full"
+              onClick={() => setShowInstructions(false)}
+              className="w-full bg-gradient-to-r from-red-600 to-green-600"
             >
               Begrepen
             </Button>
