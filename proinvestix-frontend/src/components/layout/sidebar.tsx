@@ -33,7 +33,7 @@ import {
   Network,
   GitBranch,
   Car,
-  HandHeart,
+  Heart as HandHeart,
   Lock,
   Stethoscope,
 } from 'lucide-react'
