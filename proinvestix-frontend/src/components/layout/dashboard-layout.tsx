@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { Sidebar } from './sidebar'
-import { Header } from './header'
 import { cn } from '@/lib/utils'
 
 interface DashboardLayoutProps {
@@ -10,33 +9,21 @@ interface DashboardLayoutProps {
 }
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [isCollapsed, setIsCollapsed] = useState(false)
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Mobile sidebar overlay */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 z-30 bg-black/50 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
-
-      {/* Sidebar */}
-      <div
-        className={cn(
-          'fixed inset-y-0 left-0 z-40 transform transition-transform duration-200 lg:translate-x-0',
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        )}
-      >
-        <Sidebar />
-      </div>
-
-      {/* Main content */}
-      <div className="lg:pl-64">
-        <Header onMenuClick={() => setSidebarOpen(true)} />
-        <main className="p-6">{children}</main>
-      </div>
+      <Sidebar isCollapsed={isCollapsed} onToggle={() => setIsCollapsed(!isCollapsed)} />
+      
+      <main className={cn(
+        "transition-all duration-300 min-h-screen",
+        isCollapsed ? "lg:pl-16" : "lg:pl-64",
+        "pt-16 lg:pt-0" // Extra padding top op mobiel voor menu knop
+      )}>
+        <div className="p-6">
+          {children}
+        </div>
+      </main>
     </div>
   )
 }

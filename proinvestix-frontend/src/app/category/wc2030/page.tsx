@@ -1,5 +1,7 @@
 'use client'
 
+import { BackButton } from '@/components/ui/back-button'
+
 import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Globe, Flag, Car, ArrowRight, Truck } from 'lucide-react'
@@ -34,6 +36,7 @@ const modules = [
 export default function WC2030CategoryPage() {
   return (
     <div className="space-y-6">
+      <BackButton href="/dashboard" label="Terug naar Dashboard" />
       {/* Header */}
       <div className="flex items-center gap-4">
         <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-red-500/10">
