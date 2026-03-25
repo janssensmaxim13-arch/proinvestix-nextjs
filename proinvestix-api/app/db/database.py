@@ -6,9 +6,21 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sess
 from sqlalchemy.orm import declarative_base
 from app.config import settings
 
+def get_database_url() -> str:
+    """Convert DATABASE_URL to async format if needed."""
+    url = settings.DATABASE_URL
+    
+    # Railway PostgreSQL URLs start with postgresql:// but we need postgresql+asyncpg://
+    if url.startswith("postgresql://"):
+        url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
+    elif url.startswith("postgres://"):
+        url = url.replace("postgres://", "postgresql+asyncpg://", 1)
+    
+    return url
+
 # Create async engine
 engine = create_async_engine(
-    settings.DATABASE_URL,
+    get_database_url(),
     echo=settings.DEBUG,
     future=True,
 )
@@ -27,58 +39,25 @@ Base = declarative_base()
 
 
 async def get_db() -> AsyncSession:
-    """
-    Dependency that provides a database session.
-    
-    Usage:
-        @app.get("/items")
-        async def get_items(db: AsyncSession = Depends(get_db)):
-            ...
-    """
+    """Dependency that provides a database session."""
     async with AsyncSessionLocal() as session:
         try:
             yield session
-            await session.commit()
-        except Exception:
-            await session.rollback()
-            raise
         finally:
             await session.close()
 
 
+async def get_db_session() -> AsyncSession:
+    """Get a database session for use outside of FastAPI dependencies."""
+    return AsyncSessionLocal()
+
+
 async def init_db():
-    """
-    Initialize database - create all tables.
-    Called on application startup.
-    """
+    """Initialize database tables."""
     async with engine.begin() as conn:
-        # Import all models to ensure they are registered
-        from app.db import models  # noqa
         await conn.run_sync(Base.metadata.create_all)
 
 
 async def close_db():
-    """
-    Close database connection.
-    Called on application shutdown.
-    """
+    """Close database connections."""
     await engine.dispose()
-
-
-from contextlib import asynccontextmanager
-
-@asynccontextmanager
-async def get_db_session():
-    """
-    Context manager for database session.
-    Use for non-request database operations.
-    """
-    async with AsyncSessionLocal() as session:
-        try:
-            yield session
-            await session.commit()
-        except Exception:
-            await session.rollback()
-            raise
-        finally:
-            await session.close()
