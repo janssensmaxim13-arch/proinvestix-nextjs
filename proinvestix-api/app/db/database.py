@@ -2,6 +2,7 @@
 # ProInvestiX Enterprise API - Database Connection
 # ============================================================================
 
+from contextlib import asynccontextmanager
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from sqlalchemy.orm import declarative_base
 from app.config import settings
@@ -47,9 +48,14 @@ async def get_db() -> AsyncSession:
             await session.close()
 
 
-async def get_db_session() -> AsyncSession:
+@asynccontextmanager
+async def get_db_session():
     """Get a database session for use outside of FastAPI dependencies."""
-    return AsyncSessionLocal()
+    session = AsyncSessionLocal()
+    try:
+        yield session
+    finally:
+        await session.close()
 
 
 async def init_db():
