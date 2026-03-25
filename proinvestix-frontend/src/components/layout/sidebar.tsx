@@ -14,11 +14,13 @@ import {
   Lock,
   ChevronRight,
   ChevronLeft,
+  PanelLeftClose,
+  PanelLeft,
   Menu,
+  X,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
-// Categorieën voor navigatie
 const categories = [
   { name: "Governance & Integrity", href: "/category/governance", icon: Shield, color: "text-purple-500", bgColor: "bg-purple-500/10" },
   { name: "Financial Ecosystem", href: "/category/financial", icon: Wallet, color: "text-green-500", bgColor: "bg-green-500/10" },
@@ -39,37 +41,63 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
 
   return (
     <>
-      {/* Mobile overlay */}
+      {/* Mobile overlay - alleen zichtbaar als sidebar open is op mobiel */}
       {!isCollapsed && (
-        <div 
-          className="fixed inset-0 bg-black/50 z-30 lg:hidden" 
-          onClick={onToggle}
-        />
+        <div className="fixed inset-0 bg-black/50 z-30 lg:hidden" onClick={onToggle} />
       )}
       
       {/* Sidebar */}
       <aside className={cn(
         "fixed left-0 top-0 z-40 h-screen border-r bg-card transition-all duration-300",
-        isCollapsed ? "w-0 lg:w-16 overflow-hidden" : "w-64"
+        isCollapsed ? "-translate-x-full lg:translate-x-0 lg:w-16" : "w-64 translate-x-0"
       )}>
-        {/* Logo */}
+        {/* Header met logo en toggle */}
         <div className="flex h-16 items-center justify-between border-b px-4">
-          {!isCollapsed && (
-            <Link href="/dashboard" className="flex items-center gap-2">
+          <Link href="/dashboard" className={cn("flex items-center gap-2", isCollapsed && "lg:hidden")}>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-red-600 to-green-600">
+              <span className="text-lg font-bold text-white">P</span>
+            </div>
+            <span className="text-lg font-bold">ProInvestiX</span>
+          </Link>
+          
+          {/* Logo alleen (collapsed mode) */}
+          {isCollapsed && (
+            <Link href="/dashboard" className="hidden lg:flex items-center justify-center w-full">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-red-600 to-green-600">
                 <span className="text-lg font-bold text-white">P</span>
               </div>
-              <span className="text-lg font-bold">ProInvestiX</span>
             </Link>
           )}
-          <Button variant="ghost" size="icon" onClick={onToggle} className="hidden lg:flex">
-            {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+
+          {/* Close knop voor mobiel */}
+          <Button variant="ghost" size="icon" onClick={onToggle} className="lg:hidden">
+            <X className="h-5 w-5" />
           </Button>
         </div>
 
+        {/* Collapse toggle knop - onderaan sidebar op desktop */}
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          onClick={onToggle} 
+          className={cn(
+            "absolute bottom-4 hidden lg:flex items-center gap-2 text-muted-foreground hover:text-foreground",
+            isCollapsed ? "left-1/2 -translate-x-1/2" : "left-4"
+          )}
+        >
+          {isCollapsed ? (
+            <PanelLeft className="h-4 w-4" />
+          ) : (
+            <>
+              <PanelLeftClose className="h-4 w-4" />
+              <span className="text-xs">Inklappen</span>
+            </>
+          )}
+        </Button>
+
         {/* Navigation */}
-        <nav className={cn("h-[calc(100vh-4rem)] overflow-y-auto p-4", isCollapsed && "hidden lg:block lg:p-2")}>
-          {/* Dashboard */}
+        <nav className="h-[calc(100vh-8rem)] overflow-y-auto p-4">
+          {/* Dashboard link */}
           <Link
             href="/dashboard"
             className={cn(
@@ -77,6 +105,7 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
               pathname === '/dashboard' ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted hover:text-foreground',
               isCollapsed && "lg:justify-center lg:px-2"
             )}
+            title={isCollapsed ? "Dashboard" : undefined}
           >
             <LayoutDashboard className="h-5 w-5 flex-shrink-0" />
             {!isCollapsed && <span>Dashboard</span>}
@@ -115,15 +144,30 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
         </nav>
       </aside>
 
-      {/* Mobile toggle button */}
+      {/* Floating menu knop voor mobiel (altijd zichtbaar linksboven) */}
       <Button
         variant="outline"
         size="icon"
         onClick={onToggle}
-        className="fixed top-4 left-4 z-50 lg:hidden"
+        className={cn(
+          "fixed top-4 left-4 z-50 lg:hidden shadow-lg bg-background",
+          !isCollapsed && "hidden" // Verberg als sidebar open is
+        )}
       >
         <Menu className="h-5 w-5" />
       </Button>
+
+      {/* Floating toggle voor desktop als sidebar ingeklapt is */}
+      {isCollapsed && (
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={onToggle}
+          className="fixed top-4 left-20 z-50 hidden lg:flex shadow-lg bg-background"
+        >
+          <PanelLeft className="h-4 w-4" />
+        </Button>
+      )}
     </>
   )
 }
