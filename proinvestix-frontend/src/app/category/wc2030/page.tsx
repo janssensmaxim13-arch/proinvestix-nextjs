@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Globe, Flag, Car, ArrowRight } from 'lucide-react'
+import { Globe, Flag, Car, ArrowRight, Truck } from 'lucide-react'
 
 const modules = [
   {
@@ -20,6 +20,14 @@ const modules = [
     icon: Car,
     color: 'text-blue-500',
     bgColor: 'bg-blue-500/10',
+  },
+  {
+    name: 'PMA Logistics',
+    description: 'Platform logistiek & supply chain',
+    href: '/pma-logistics',
+    icon: Truck,
+    color: 'text-green-500',
+    bgColor: 'bg-green-500/10',
   },
 ]
 

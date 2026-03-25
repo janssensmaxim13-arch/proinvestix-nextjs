@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Shield, Stethoscope, Building, Newspaper, ArrowRight } from 'lucide-react'
+import { Shield, Stethoscope, Building, Newspaper, ArrowRight, BarChart3 } from 'lucide-react'
 
 const modules = [
   {
@@ -28,6 +28,14 @@ const modules = [
     icon: Newspaper,
     color: 'text-purple-500',
     bgColor: 'bg-purple-500/10',
+  },
+  {
+    name: 'Analytics',
+    description: 'Platform statistieken & inzichten',
+    href: '/analytics',
+    icon: BarChart3,
+    color: 'text-green-500',
+    bgColor: 'bg-green-500/10',
   },
 ]
 

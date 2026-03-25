@@ -2,16 +2,24 @@
 
 import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Award, Trophy, ArrowLeftRight, GraduationCap, ShoppingCart, Shield, School, Gamepad2, ArrowRight } from 'lucide-react'
+import { Award, Trophy, ArrowLeftRight, GraduationCap, ShoppingCart, Shield, School, Gamepad2, ArrowRight, Brain } from 'lucide-react'
 
 const modules = [
   {
     name: 'NTSP',
     description: 'National Talent Scouting Platform',
-    href: '/talents',
+    href: '/ntsp',
     icon: Trophy,
     color: 'text-yellow-500',
     bgColor: 'bg-yellow-500/10',
+  },
+  {
+    name: 'Match Intelligence',
+    description: 'AI-gedreven wedstrijdanalyse',
+    href: '/match-intelligence',
+    icon: Brain,
+    color: 'text-purple-500',
+    bgColor: 'bg-purple-500/10',
   },
   {
     name: 'Transfers',
@@ -34,8 +42,8 @@ const modules = [
     description: 'Spelersmarkt & transfer listings',
     href: '/transfer-market',
     icon: ShoppingCart,
-    color: 'text-purple-500',
-    bgColor: 'bg-purple-500/10',
+    color: 'text-orange-500',
+    bgColor: 'bg-orange-500/10',
   },
   {
     name: 'FRMF',
