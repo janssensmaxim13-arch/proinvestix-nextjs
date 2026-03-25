@@ -12,7 +12,6 @@ import {
 import { formatCurrency, formatNumber, formatRelativeTime } from '@/lib/utils'
 import { dashboardApi } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
-import { InstallAppButton } from '@/components/install-app-button'
 
 // WK 2030 countdown
 const WK_2030_DATE = new Date('2030-06-13T00:00:00')
@@ -47,7 +46,6 @@ function DashboardContent() {
             <h1 className="text-3xl font-bold">Dashboard</h1>
             <p className="text-muted-foreground">Welkom bij het nationale investeringsplatform</p>
           </div>
-          <InstallAppButton />
         </div>
 
         {/* WK 2030 Countdown */}

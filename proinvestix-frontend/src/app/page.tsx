@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { InstallAppButton } from '@/components/install-app-button'
 import Link from 'next/link'
 import { 
   Trophy, 
@@ -141,6 +142,7 @@ export default function Home() {
             >
               Registreer
             </Link>
+            <InstallAppButton />
           </div>
         </nav>
 
@@ -276,6 +278,7 @@ export default function Home() {
               Login
             </Link>
             <Link href="/auth/register" className="text-gray-400 hover:text-white transition-colors">
+            <InstallAppButton />
               Registreer
             </Link>
           </div>
