@@ -11,6 +11,7 @@ import {
 import { formatCurrency, formatNumber, formatRelativeTime } from '@/lib/utils'
 import { dashboardApi } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
+import { InstallAppButton } from '@/components/install-app-button'
 
 interface StatCardProps {
   title: string
@@ -173,11 +174,14 @@ export default function DashboardPage() {
     <DashboardLayout>
       <div className="space-y-6">
         {/* Page Header */}
-        <div className="page-header">
-          <h1 className="page-title">Dashboard</h1>
-          <p className="page-description">
-            Welkom terug! Hier is een overzicht van het platform.
-          </p>
+        <div className="page-header flex items-center justify-between">
+          <div>
+            <h1 className="page-title">Dashboard</h1>
+            <p className="page-description">
+              Welkom terug! Hier is een overzicht van het platform.
+            </p>
+          </div>
+          <InstallAppButton />
         </div>
 
         {/* WK Countdown */}
