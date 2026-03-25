@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { 
   Network, 
   Building2, 
-  Handshake, 
+  Users2, 
   Globe,
   MessageSquare,
   Users,
@@ -17,7 +17,7 @@ import {
 export default function ClubConnectPage() {
   const stats = [
     { label: 'Verbonden Clubs', value: '156', icon: Building2, color: 'text-blue-500' },
-    { label: 'Partnerships', value: '89', icon: Handshake, color: 'text-green-500' },
+    { label: 'Partnerships', value: '89', icon: Users2, color: 'text-green-500' },
     { label: 'Landen', value: '28', icon: Globe, color: 'text-purple-500' },
     { label: 'Actieve Deals', value: '34', icon: TrendingUp, color: 'text-orange-500' },
   ]
@@ -64,7 +64,7 @@ export default function ClubConnectPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Handshake className="h-5 w-5 text-green-500" />
+              <Users2 className="h-5 w-5 text-green-500" />
               Partner Clubs
             </CardTitle>
             <CardDescription>Actieve partnerships</CardDescription>

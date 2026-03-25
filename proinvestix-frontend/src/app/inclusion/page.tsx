@@ -4,10 +4,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { 
-  HandHeart, 
+  Heart, 
   Users, 
   Accessibility, 
-  Heart,
+  HeartPulse,
   Calendar,
   Award,
   Globe,
@@ -18,7 +18,7 @@ export default function InclusionPage() {
   const stats = [
     { label: 'Programma\'s', value: '34', icon: Heart, color: 'text-pink-500' },
     { label: 'Deelnemers', value: '2,847', icon: Users, color: 'text-blue-500' },
-    { label: 'Partners', value: '89', icon: HandHeart, color: 'text-green-500' },
+    { label: 'Partners', value: '89', icon: HeartPulse, color: 'text-green-500' },
     { label: 'Evenementen', value: '156', icon: Calendar, color: 'text-purple-500' },
   ]
 
@@ -28,7 +28,7 @@ export default function InclusionPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
-            <HandHeart className="h-8 w-8 text-pink-500" />
+            <HeartPulse className="h-8 w-8 text-pink-500" />
             Inclusion
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -108,7 +108,7 @@ export default function InclusionPage() {
               {[
                 { name: 'Rolstoeltoegankelijk', icon: Accessibility, desc: 'Alle stadions volledig toegankelijk', progress: 95 },
                 { name: 'Audio Beschrijving', icon: Users, desc: 'Live commentaar voor visueel beperkten', progress: 78 },
-                { name: 'Gebarentaal', icon: HandHeart, desc: 'Tolken bij alle evenementen', progress: 85 },
+                { name: 'Gebarentaal', icon: HeartPulse, desc: 'Tolken bij alle evenementen', progress: 85 },
                 { name: 'Sensory Rooms', icon: Heart, desc: 'Rustige ruimtes in stadions', progress: 60 },
               ].map((feature, i) => (
                 <div key={i} className="p-3 rounded-lg bg-muted/50">
