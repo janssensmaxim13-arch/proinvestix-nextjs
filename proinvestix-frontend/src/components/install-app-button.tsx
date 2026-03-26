@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Download, X, Monitor, Smartphone, Share, PlusSquare } from 'lucide-react'
+import { Download, X, Monitor, Smartphone, Share } from 'lucide-react'
 
 export function InstallAppButton() {
   const [showModal, setShowModal] = useState(false)
@@ -17,8 +17,20 @@ export function InstallAppButton() {
       </button>
 
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-900 border border-gray-700 rounded-xl p-6 max-w-md w-full space-y-4">
+        <div 
+          className="fixed inset-0 flex items-center justify-center p-4"
+          style={{ zIndex: 99999 }}
+        >
+          {/* Backdrop */}
+          <div 
+            className="absolute inset-0 bg-black/70"
+            onClick={() => setShowModal(false)}
+          />
+          
+          {/* Modal */}
+          <div 
+            className="relative bg-gray-900 border border-gray-700 rounded-xl p-6 max-w-md w-full space-y-4 shadow-2xl"
+          >
             <div className="flex items-center justify-between">
               <h3 className="text-xl font-bold text-white">Installeer ProInvestiX</h3>
               <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-white">
@@ -54,7 +66,7 @@ export function InstallAppButton() {
 
             <button
               onClick={() => setShowModal(false)}
-              className="w-full bg-gradient-to-r from-red-600 to-green-600 text-white font-semibold py-2 rounded-lg"
+              className="w-full bg-gradient-to-r from-red-600 to-green-600 text-white font-semibold py-3 rounded-lg hover:from-red-700 hover:to-green-700"
             >
               Begrepen
             </button>
