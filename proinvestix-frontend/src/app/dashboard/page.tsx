@@ -4,14 +4,10 @@ import { useEffect, useState } from 'react'
 import { AuthGuard } from '@/components/auth-guard'
 import { DashboardLayout } from '@/components/layout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { 
-  Users, Trophy, ArrowLeftRight, Ticket, Wallet, TrendingUp, 
-  TrendingDown, Calendar, Activity 
+  Users, ArrowLeftRight, Ticket, Wallet
 } from 'lucide-react'
-import { formatCurrency, formatNumber, formatRelativeTime } from '@/lib/utils'
-import { dashboardApi } from '@/lib/api'
-import { useQuery } from '@tanstack/react-query'
+import { formatCurrency, formatNumber } from '@/lib/utils'
 
 // WK 2030 countdown
 const WK_2030_DATE = new Date('2030-06-13T00:00:00')
@@ -32,10 +28,13 @@ function DashboardContent() {
     return () => clearInterval(timer)
   }, [])
 
-  const { data: stats } = useQuery({
-    queryKey: ['dashboard-stats'],
-    queryFn: dashboardApi.getStats,
-  })
+  // Demo stats
+  const stats = {
+    talents: 12456,
+    transfers: 892,
+    tickets: 45200,
+    volume: 2450000
+  }
 
   return (
     <DashboardLayout>
@@ -86,7 +85,7 @@ function DashboardContent() {
               <Users className="h-4 w-4 text-blue-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{formatNumber(stats?.talents || 12456)}</div>
+              <div className="text-2xl font-bold">{formatNumber(stats.talents)}</div>
               <p className="text-xs text-green-500">+12% deze maand</p>
             </CardContent>
           </Card>
@@ -96,7 +95,7 @@ function DashboardContent() {
               <ArrowLeftRight className="h-4 w-4 text-purple-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{formatNumber(stats?.transfers || 892)}</div>
+              <div className="text-2xl font-bold">{formatNumber(stats.transfers)}</div>
               <p className="text-xs text-green-500">+8% deze maand</p>
             </CardContent>
           </Card>
@@ -106,7 +105,7 @@ function DashboardContent() {
               <Ticket className="h-4 w-4 text-orange-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{formatNumber(stats?.tickets || 45200)}</div>
+              <div className="text-2xl font-bold">{formatNumber(stats.tickets)}</div>
               <p className="text-xs text-green-500">+25% deze maand</p>
             </CardContent>
           </Card>
@@ -116,7 +115,7 @@ function DashboardContent() {
               <Wallet className="h-4 w-4 text-green-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{formatCurrency(stats?.volume || 2450000)}</div>
+              <div className="text-2xl font-bold">{formatCurrency(stats.volume)}</div>
               <p className="text-xs text-green-500">+18% deze maand</p>
             </CardContent>
           </Card>
